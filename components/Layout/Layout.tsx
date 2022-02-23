@@ -5,7 +5,7 @@ import Navbar from './Navbar'
 const Layout: FC = ({ children, }) => (
     <div>
         <Navbar></Navbar>
-        <main>
+        <main className="height-f">
             { children }
         </main>
     </div>
