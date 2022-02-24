@@ -359,10 +359,8 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     try {
       // suggest likechain
       await suggestChain();
-      console.log('suggestChain')
 
       await initKepr();
-      console.log('initKepr')
     } catch (ex) {
       setError(ex.message);
     }

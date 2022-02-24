@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Layout from '../components/Layout'
 import { useSigningCosmWasmClient } from '../hooks';
 import ConnectWallet  from '../components/ConnectWallet';
@@ -19,27 +18,20 @@ const Home: NextPage = () => {
     if (connectError) alert(connectError)
   }, [connectError])
 
+  useEffect(() => {
+    if (walletAddress) console.log(walletAddress)
+  }, [walletAddress])
+
   return (
-    <div>
-      <Head>
-        <title>depub.Page</title>
-        <meta name="description" content="depub.Page" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Layout>
-        <div className="container mx-auto py-2">
-          <div className="text-center">
-            <ConnectWallet
-              onPressKeplr={connectKeplr}
-            ></ConnectWallet>
-          </div>
+    <Layout>
+      <div className="container mx-auto py-24">
+        <div className="text-center">
+          <ConnectWallet
+            onPressKeplr={connectKeplr}
+          ></ConnectWallet>
         </div>
-
-      </Layout>
-
-
-    </div>
+      </div>
+    </Layout>
   )
 }
 
