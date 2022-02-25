@@ -7,6 +7,7 @@ import Button from '../../components/Common/Button'
 
 import Layout from '../../components/Layout'
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 
 const toolbar = [ 
@@ -42,8 +43,11 @@ const CreatePage = () => {
                     generateMarkdownPreview={markdown => Promise.resolve(converter.makeHtml(markdown)) }
                 />
             </div>
-            <div className="text-center">
-                <Button className="primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
+            <div className="max-w-2xl mx-auto text-center flex justify-between">
+                <Link href="/dashboard">
+                    <a className="white-btn">Back</a>
+                </Link>
+                <Button className="w-64 primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
             </div>
         </Layout>
     )

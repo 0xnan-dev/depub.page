@@ -3,20 +3,28 @@ import { useEffect, useState } from "react"
 import Layout from "../../components/Layout"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks"
 import { ISCNRecord } from "@likecoin/iscn-js"
+import Button from "../../components/Common/Button"
+import { useRouter } from "next/router"
 
 
 const DashboardPages = (props: any) => {
     const {
         walletAddress,
+        disconnect,
     } = useSigningCosmWasmClient()
     const {
         fetchMessagesByOwner,
     } = useAppState()
     const [ pages, setPages ] = useState<ISCNRecord[]>([])
+    const router = useRouter()
 
     async function fetchPages(address: string) {
         let results = await fetchMessagesByOwner(address)
         if (results) setPages(results)
+    }
+    async function logout() {
+        await disconnect()
+        router.push('/')
     }
 
     useEffect(() => {
@@ -40,12 +48,13 @@ const DashboardPages = (props: any) => {
     return (
         <Layout>
             <div className="max-w-md mx-auto py-24 ">
-                <div className="text-center">
+                <div className="text-center flex items-center justify-between">
                     <Link href="/dashboard/create-page">
-                        <a className="block primary-btn">
+                        <a className="w-64 block primary-btn">
                             Create Entry
                         </a>
                     </Link>
+                    <Button className="white-btn" onClick={logout}>Logout</Button>
                 </div>
                 {PageList}
             </div>
