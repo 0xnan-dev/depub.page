@@ -23,13 +23,16 @@ const DashboardPages = (props) => {
         if (walletAddress) fetchPages(walletAddress)
     }, [walletAddress])
 
-    const PageList = pages.map(p => (
-        <Link key={p.ipld} href={`/page?pageId=${p.ipld}`}>
-            <a className="mx-auto block p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-70">
-                {p.data.contentMetadata.description}
-            </a> 
-        </Link>
-    ))
+
+    const PageList = pages.map(p => {
+        return (
+            <Link key={p.data['@id']} href={`/page?pageId=${encodeURIComponent(p.data['@id'])}`}>
+                <a className="mx-auto block p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-70">
+                    {p.data.contentMetadata.description}
+                </a> 
+            </Link>
+        )
+    })
 
     return (
         <Layout>

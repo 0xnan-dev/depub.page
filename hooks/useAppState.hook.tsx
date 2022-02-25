@@ -57,6 +57,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     isLoading: boolean;
     error: string | null;
     fetchUser: (dtagOrAddress: string, noCache?: boolean) => Promise<User | null>;
+    fetchMessage: (iscnId: string) => Promise<ISCNRecord | null>;
     // fetchMessages: (previousId?: string, noCache?: boolean) => Promise<Message[] | null>;
     fetchMessages: (previousId?: string, noCache?: boolean) => Promise<ISCNRecord[] | null>;
     fetchMessagesByTag: (
@@ -232,9 +233,28 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     //   []
     // );
 
+    const fetchMessage = useCallback(
+      async (iscnId: string): Promise<ISCNRecord | null> => {
+        debug('fetchMessage()');
+        dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
+        try {
+          const res = await queryClient.queryRecordsById(iscnId)
+          dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
+          return res?.records[0] || null
+        } catch (ex) {
+          debug('fetchMessage() -> error: %O', ex);
+          dispatch({
+            type: ActionType.SET_ERROR,
+            error: 'Fail to fetch messages, please try again later.',
+          });
+        }
+        return null
+      },
+      []
+    )
+
     const fetchMessagesByOwner = useCallback(
       async (walletAddress: string): Promise<ISCNRecord[] | null> => {
-        console.log(walletAddress)
         debug('fetchMessagesByOwner()');
         dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
         try {
@@ -242,7 +262,6 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
           return (res || []).filter((iscn: ISCNRecord) => iscn.data.author !== walletAddress)
         } catch (error) {
-          console.log(error)
           debug('fetchMessagesByOwner() -> error: %O', ex);
           dispatch({
             type: ActionType.SET_ERROR,
@@ -262,9 +281,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
   
         try {
           const res = await queryClient.queryRecordsByFingerprint(ISCN_FINGERPRINT)
-
-          console.log(res)
-  
+          debug(res)
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
   
           if (res) return res.records
@@ -456,11 +473,12 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
         ...state,
         postMessage,
         fetchUser,
+        fetchMessage,
         fetchMessages,
         fetchMessagesByTag,
         fetchMessagesByOwner,
       }),
-      [state, fetchUser, postMessage, fetchMessagesByTag, fetchMessages, fetchMessagesByOwner]
+      [state, fetchUser, postMessage, fetchMessage, fetchMessagesByTag, fetchMessages, fetchMessagesByOwner]
     );
   
     return <AppStateContext.Provider value={memoValue}>{children}</AppStateContext.Provider>;

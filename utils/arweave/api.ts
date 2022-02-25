@@ -61,3 +61,7 @@ export async function uploadToArweave(
 
   return data as UploadArweaveResponse;
 }
+
+export async function downloadArweave( arweaveId: string): Promise<any> {
+  return axios.get(`https://arweave.net/${arweaveId}`)
+}
