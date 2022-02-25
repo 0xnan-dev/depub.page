@@ -4,6 +4,7 @@ import { useSigningCosmWasmClient } from '../hooks';
 import ConnectWallet  from '../components/ConnectWallet';
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const {
@@ -14,6 +15,12 @@ const Home: NextPage = () => {
     walletAddress,
     offlineSigner,
   } = useSigningCosmWasmClient()
+  const router = useRouter()
+
+  async function connectWallet() {
+    await connectKeplr()
+    router.push('/dashboard')
+  }
 
   useEffect(() => {
     if (connectError) alert(connectError)
@@ -32,7 +39,7 @@ const Home: NextPage = () => {
           {
             walletAddress
               ?  <DashBoardBtn></DashBoardBtn>
-              : <ConnectWallet isLoading={isConnectLoading} onPressKeplr={connectKeplr}/>
+              : <ConnectWallet isLoading={isConnectLoading} onPressKeplr={connectWallet}/>
           }
         </div>
       </div>
