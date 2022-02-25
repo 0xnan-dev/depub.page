@@ -33,7 +33,6 @@ export async function submitToArweaveAndISCN(
 
   if (!arweaveId) {
     const res = await sendLIKE(fromAddress, address, LIKE, signer, memo);
-    console.log(res);
 
     ({ arweaveId, ipfsHash } = await uploadToArweave(files, res.transactionHash));
   }
@@ -50,7 +49,6 @@ export async function submitToArweaveAndISCN(
   const iscnMetadataWithArweaveId = { ...iscnMetadata, contentFingerprints };
 
   await signingClient.setSigner(signer);
-  console.log(iscnMetadataWithArweaveId)
 
   const res = await signingClient.createISCNRecord(fromAddress, iscnMetadataWithArweaveId);
 

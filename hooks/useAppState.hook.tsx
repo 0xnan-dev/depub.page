@@ -449,7 +449,6 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
   
           return txn;
         } catch (ex) {
-            console.log()
           debug('postMesage() -> error: %O', ex);
   
           if (/^Account does not exist on chain/.test(ex.message)) {

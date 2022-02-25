@@ -51,12 +51,10 @@ export async function uploadToArweave(
       form.append(f.name, f, f.name);
     });
   }
-  console.log(form)
 
   const res = await axios.post(`/arweave/upload?txHash=${txHash}`, form, {
     headers: isNode() ? { ...form.getHeaders() } : {},
   });
-  console.log(res)
   const { data } = res;
 
   return data as UploadArweaveResponse;

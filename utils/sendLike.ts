@@ -39,9 +39,7 @@ export async function sendLIKE(
 
   const client = await SigningStargateClient.connectWithSigner(RPC_ENDPOINT, signer);
   const coins = [{ amount: new BigNumber(amount).shiftedBy(9).toFixed(0, 0), denom: COSMOS_DENOM }];
-  console.log(coins)
   const res = await client.sendTokens(fromAddress, toAddress, coins, DEFAULT_TRANSFER_FEE, memo);
-  console.log(res)
 
   debug('sendLike() -> res: %O', res);
 

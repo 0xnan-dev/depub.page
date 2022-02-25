@@ -25,7 +25,6 @@ const CreatePage = () => {
     async function onSubmit() {
         if (offlineSigner) {
             const txn = await postMessage(offlineSigner, value)
-            console.log(txn)
         }
     }
     return (
