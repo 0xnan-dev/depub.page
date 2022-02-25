@@ -27,6 +27,7 @@ const Home: NextPage = () => {
       <div className="container mx-auto py-24">
         <div className="text-center">
           <ConnectWallet
+            isLoading={isConnectLoading}
             onPressKeplr={connectKeplr}
           ></ConnectWallet>
         </div>

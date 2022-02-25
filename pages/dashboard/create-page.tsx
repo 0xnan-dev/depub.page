@@ -3,6 +3,7 @@ import ReactMde from "react-mde"
 import "react-mde/lib/styles/css/react-mde-all.css"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks";
 import converter from "../../utils/showdown";
+import Button from '../../components/Common/Button'
 
 import Layout from '../../components/Layout'
 
@@ -40,7 +41,7 @@ const CreatePage = () => {
                 />
             </div>
             <div className="text-center">
-                <button type="button" className="button" onClick={onSubmit}>Submit</button>
+                <Button className="primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
             </div>
         </Layout>
     )
