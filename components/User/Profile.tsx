@@ -1,7 +1,7 @@
 // import Image from "next/image"
 
 
-const UserProfile = (props) => {
+const UserProfile = (props: any) => {
     return (
         <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">

@@ -3,7 +3,6 @@ import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import Debug from 'debug';
-import localStorage from 'local-storage';
 import { payloadId } from '@walletconnect/utils';
 import { AccountData, OfflineSigner } from '@cosmjs/proto-signing';
 import { SignDoc } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
@@ -152,7 +151,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     try {
       await (window as any).keplr?.experimentalSuggestChain(getChainInfo());
-    } catch (ex) {
+    } catch (ex: any) {
       setError(ex.message);
     }
 
@@ -173,11 +172,11 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     );
 
     accountKeys.forEach(async key => {
-      localStorage.remove(key);
+      localStorage.removeItem(key);
     });
 
-    localStorage.remove(KEY_CONNECTED_WALLET_TYPE);
-    localStorage.remove(KEY_WALLET_CONNECT);
+    localStorage.removeItem(KEY_CONNECTED_WALLET_TYPE);
+    localStorage.removeItem(KEY_WALLET_CONNECT);
 
     if (connector.connected) {
       void connector.killSession();
@@ -213,7 +212,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setWalletAddress(address);
     setOfflineSigner(myOfflineSigner);
 
-    localStorage.set(KEY_CONNECTED_WALLET_TYPE, 'keplr');
+    localStorage.setItem(KEY_CONNECTED_WALLET_TYPE, 'keplr');
 
     return true;
   };
@@ -241,15 +240,15 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
       debug('initWalletConnect() -> account: %O', account);
 
-      localStorage.set(
+      localStorage.setItem(
         `${KEY_WALLET_CONNECT_ACCOUNT_PREFIX}_${connector.peerId}`,
         JSON.stringify(account)
       );
     } else {
-      const serializedWalletConnectAccount = localStorage.get(
+      const serializedWalletConnectAccount = localStorage.getItem(
         `${KEY_WALLET_CONNECT_ACCOUNT_PREFIX}_${connector.peerId}`
       );
-      const walletConnectConnectSession = localStorage.get(KEY_WALLET_CONNECT);
+      const walletConnectConnectSession = localStorage.getItem(KEY_WALLET_CONNECT);
 
       if (serializedWalletConnectAccount) {
         debug('initWalletConnect() -> load serialized account');
@@ -257,7 +256,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
         account = JSON.parse(serializedWalletConnectAccount);
       } else if (walletConnectConnectSession) {
         // remove orphan session
-        localStorage.remove(KEY_WALLET_CONNECT);
+        localStorage.removeItem(KEY_WALLET_CONNECT);
       }
     }
 
@@ -290,7 +289,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setWalletAddress(address);
     setOfflineSigner(myOfflineSigner);
 
-    localStorage.set(KEY_CONNECTED_WALLET_TYPE, 'likerland_app');
+    localStorage.setItem(KEY_CONNECTED_WALLET_TYPE, 'likerland_app');
 
     return true;
   };
@@ -302,7 +301,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     let connected = false;
 
-    const connectedWalletType = (localStorage.get(
+    const connectedWalletType = (localStorage.getItem(
       KEY_CONNECTED_WALLET_TYPE
     )) as ConnectedWalletType;
 
@@ -316,7 +315,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       } else if (connectedWalletType === 'keplr') {
         connected = await initKepr();
       }
-    } catch (ex) {
+    } catch (ex: any) {
       setError(ex.message);
     }
 
@@ -338,7 +337,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     try {
       await initWalletConnect();
-    } catch (ex) {
+    } catch (ex: any) {
       setError(ex.message);
     }
 
@@ -361,7 +360,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       await suggestChain();
 
       await initKepr();
-    } catch (ex) {
+    } catch (ex: any) {
       setError(ex.message);
     }
 
@@ -372,7 +371,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     void setupAccount();
 
     const keystoreChangeHandler = () => {
-      const connectedWalletType: ConnectedWalletType = localStorage.get(KEY_CONNECTED_WALLET_TYPE)
+      const connectedWalletType = localStorage.getItem(KEY_CONNECTED_WALLET_TYPE) || 'keplr'
       if (connectedWalletType === 'keplr') {
         void initKepr();
       }

@@ -5,7 +5,7 @@ import { useAppState, useSigningCosmWasmClient } from "../../hooks"
 import { ISCNRecord } from "@likecoin/iscn-js"
 
 
-const DashboardPages = (props) => {
+const DashboardPages = (props: any) => {
     const {
         walletAddress,
     } = useSigningCosmWasmClient()
@@ -25,8 +25,11 @@ const DashboardPages = (props) => {
 
 
     const PageList = pages.map(p => {
+        const iscnId = p.data['@id'] as string
+        if (!iscnId) return ''
+
         return (
-            <Link key={p.data['@id']} href={`/page?pageId=${encodeURIComponent(p.data['@id'])}`}>
+            <Link key={iscnId} href={`/page?pageId=${encodeURIComponent(iscnId)}`}>
                 <a className="mx-auto block p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-70">
                     {p.data.contentMetadata.description}
                 </a> 

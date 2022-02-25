@@ -1,6 +1,7 @@
 import Loading from "./Loading"
 
-const Button = (props) => {
+
+const Button = (props: any) => {
     const type = props.type || 'button'
     return (
         <button

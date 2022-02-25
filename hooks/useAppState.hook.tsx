@@ -87,6 +87,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     error: null,
     isLoading: false,
     fetchUser: null as never,
+    fetchMessage: null as never,
     fetchMessages: null as never,
     fetchMessagesByTag: null as never,
     fetchMessagesByOwner: null as never,
@@ -261,7 +262,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
           let res = await fetchMessages()
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
           return (res || []).filter((iscn: ISCNRecord) => iscn.data.author !== walletAddress)
-        } catch (error) {
+        } catch (ex) {
           debug('fetchMessagesByOwner() -> error: %O', ex);
           dispatch({
             type: ActionType.SET_ERROR,
@@ -448,7 +449,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
   
           return txn;
-        } catch (ex) {
+        } catch (ex: any) {
           debug('postMesage() -> error: %O', ex);
   
           if (/^Account does not exist on chain/.test(ex.message)) {
