@@ -18,8 +18,7 @@ const Home: NextPage = () => {
   const router = useRouter()
 
   async function connectWallet() {
-    await connectKeplr()
-    router.push('/dashboard')
+    if (await connectKeplr()) router.push('/dashboard')
   }
 
   useEffect(() => {

@@ -23,7 +23,7 @@ export interface ISigningCosmWasmClientContext {
   offlineSigner: OfflineSigner | null;
   isLoading: boolean;
   error: string | null;
-  connectKeplr: () => Promise<void>;
+  connectKeplr: () => Promise<boolean | void>;
   connectWalletConnect: () => Promise<void>;
   disconnect: () => void;
 }
@@ -359,7 +359,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       // suggest likechain
       await suggestChain();
 
-      await initKepr();
+      return await initKepr();
     } catch (ex: any) {
       setError(ex.message);
     }
