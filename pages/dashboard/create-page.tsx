@@ -6,6 +6,7 @@ import converter from "../../utils/showdown";
 import Button from '../../components/Common/Button'
 
 import Layout from '../../components/Layout'
+import { useRouter } from "next/router";
 
 
 const toolbar = [ 
@@ -21,10 +22,12 @@ const CreatePage = () => {
     const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
     const { isLoading, postMessage, fetchUser } = useAppState();
     const { offlineSigner } = useSigningCosmWasmClient();
+    const router = useRouter()
 
     async function onSubmit() {
         if (offlineSigner) {
-            const txn = await postMessage(offlineSigner, value)
+            await postMessage(offlineSigner, value)
+            router.push('/dashboard')
         }
     }
     return (
