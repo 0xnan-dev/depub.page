@@ -12,6 +12,7 @@ const Page = () => {
     } = useAppState()
     const pageId = router.query.pageId
     const [ arweaveId, setAreaveId ] = useState<string | null>(null)
+    const [ isLoaded, setIsloaded ] = useState(false)
     const [ markDownContent, SetMarkDownContent ] = useState<string | null>(null)
     async function fetchISCN(iscnId: string) {
         const iscn = await fetchMessage(iscnId)
@@ -21,8 +22,13 @@ const Page = () => {
     }
 
     async function getArweaveContent(arweaveId: string) {
-        const res = await downloadArweave(arweaveId)
-        SetMarkDownContent(res.data)
+        try {
+            const res = await downloadArweave(arweaveId)
+            SetMarkDownContent(res.data)
+        } catch (error) {
+            console.log(error)
+        }
+        setIsloaded(true)           
     }
 
     useEffect(() => {
@@ -33,14 +39,24 @@ const Page = () => {
         if (arweaveId) getArweaveContent(arweaveId)
     }, [arweaveId])
 
+    const htmlContent = () => {
+        if (isLoaded) {
+            return (
+                markDownContent
+                    ? <ReactMarkdown>{markDownContent}</ReactMarkdown>
+                    : <p>Page Not Exist</p>
+            )
+        } else {
+            return (<p>Loading ... </p>)
+        }
+    }
+
     return (
         <Layout>
             <div className="max-w-lg mx-auto py-24">
-                {
-                    markDownContent
-                        ? <ReactMarkdown>{markDownContent}</ReactMarkdown>
-                        : <p>Page Not Exist</p>
-                }
+
+                { htmlContent() }
+
                 <div className="py-10">
                     <div className=" text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
                         <a
