@@ -16,8 +16,10 @@ const KEY_CONNECTED_WALLET_TYPE = 'KEY_CONNECTED_WALLET_TYPE';
 const isTestnet = /testnet/.test(PUBLIC_CHAIN_ID);
 
 type ConnectedWalletType = 'keplr' | 'likerland_app';
+type StatusType = 'connecting' | 'connected' | 'guest'
 
 export interface ISigningCosmWasmClientContext {
+  status: StatusType;
   walletAddress: string | null;
   signingClient: SigningCosmWasmClient | null;
   offlineSigner: OfflineSigner | null;
@@ -128,6 +130,7 @@ export const getChainInfo = () => {
 };
 
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
+  const [status, setStatus] = useState<StatusType>('connecting');
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [offlineSigner, setOfflineSigner] = useState<OfflineSigner | null>(null);
   const [signingClient, setSigningClient] = useState<SigningCosmWasmClient | null>(null);
@@ -182,6 +185,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       void connector.killSession();
     }
 
+    setStatus('guest')
     setWalletAddress(null);
     setOfflineSigner(null);
     setSigningClient(null);
@@ -209,6 +213,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     if (!address) return false;
 
+    setStatus('connected')
     setWalletAddress(address);
     setOfflineSigner(myOfflineSigner);
 
@@ -286,6 +291,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       },
     };
 
+    setStatus('connected')
     setWalletAddress(address);
     setOfflineSigner(myOfflineSigner);
 
@@ -296,6 +302,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
   const setupAccount = async () => {
     if (typeof (window as any).keplr === 'undefined') {
+      setStatus('guest')
       return;
     }
 
@@ -315,6 +322,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       } else if (connectedWalletType === 'keplr') {
         connected = await initKepr();
       }
+      if (!connected) setStatus('guest')
     } catch (ex: any) {
       setError(ex.message);
     }
@@ -386,6 +394,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   }, []);
 
   return {
+    status,
     walletAddress,
     signingClient,
     isLoading,

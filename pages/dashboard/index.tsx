@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Layout from "../../components/Layout"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks"
 import { ISCNRecord } from "@likecoin/iscn-js"
@@ -10,6 +10,7 @@ import { useRouter } from "next/router"
 const DashboardPages = (props: any) => {
     const {
         walletAddress,
+        status,
         disconnect,
     } = useSigningCosmWasmClient()
     const {
@@ -30,6 +31,10 @@ const DashboardPages = (props: any) => {
     useEffect(() => {
         if (walletAddress) fetchPages(walletAddress)
     }, [walletAddress])
+
+    useEffect(() => {
+        if (status == 'guest') router.push('/')
+    }, [status, router])
 
 
     const PageList = pages.map(p => {

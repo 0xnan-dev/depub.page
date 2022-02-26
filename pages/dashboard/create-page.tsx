@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ReactMde from "react-mde"
 import "react-mde/lib/styles/css/react-mde-all.css"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks";
@@ -19,11 +19,16 @@ const toolbar = [
 ]
 
 const CreatePage = () => {
+    const { status, } = useSigningCosmWasmClient()
     const [value, setValue] = useState("**Hello world!!!**");
     const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
     const { isLoading, postMessage, fetchUser } = useAppState();
     const { offlineSigner } = useSigningCosmWasmClient();
     const router = useRouter()
+
+    useEffect(() => {
+        if (status == 'guest') router.push('/')
+    }, [status, router])
 
     async function onSubmit() {
         if (offlineSigner) {
