@@ -4,6 +4,8 @@ import Layout from "../components/Layout";
 import { useAppState } from "../hooks";
 import { downloadIpfs } from "../utils/arweave/api";
 import ReactMarkdown from "react-markdown";
+import { MetaLinks } from "../components/Page";
+import { MetaLinkProps } from "../components/Page/MetaLink";
 
 const Page = () => {
     const router = useRouter();
@@ -57,6 +59,22 @@ const Page = () => {
             return (<p>Loading ... </p>)
         }
     }
+    const metaLinks: MetaLinkProps[] = []
+    if (arweaveId) {
+        metaLinks.push({
+            link: `https://viewblock.io/arweave/tx/${arweaveId}`,
+            label: 'ARWEAVE TX',
+            value: arweaveId,
+        })
+    }
+    if (pageId && typeof pageId == 'string') {
+        const encodedIscn = encodeURIComponent(pageId)
+        metaLinks.push({
+            link: `https://app.like.co/view/${encodedIscn}`,
+            label: 'ISCN',
+            value: pageId.replace('iscn://', ''),
+        })
+    }
 
     return (
         <Layout>
@@ -64,22 +82,7 @@ const Page = () => {
 
                 { htmlContent() }
 
-                <div className="py-10">
-                    <div className=" text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
-                        <a
-                            href={`https://viewblock.io/arweave/tx/${arweaveId}`} 
-                            target="_blank"
-                            rel="noreferrer"
-                            className="block py-2 px-4 w-full rounded-t-lg rounded-b-lg border-b border-gray-200 hover:bg-gray-100">
-                            <div className="text-gray-500 flex items-center justify-between">
-                                <span>
-                                    ARWEAVE TX
-                                </span>
-                                <span>{arweaveId}</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                <MetaLinks links={metaLinks}></MetaLinks>
 
             </div>
         </Layout>
