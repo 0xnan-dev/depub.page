@@ -60,6 +60,6 @@ export async function uploadToArweave(
   return data as UploadArweaveResponse;
 }
 
-export async function downloadArweave( arweaveId: string): Promise<any> {
-  return axios.get(`https://arweave.net/${arweaveId}`)
+export async function downloadIpfs( ipfsId: string): Promise<any> {
+  return axios.get(`https://cloudflare-ipfs.com/ipfs/${ipfsId}`)
 }

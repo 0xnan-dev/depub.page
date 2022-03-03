@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { useAppState } from "../hooks";
-import { downloadArweave } from "../utils/arweave/api";
+import { downloadIpfs } from "../utils/arweave/api";
 import ReactMarkdown from "react-markdown";
 
 const Page = () => {
@@ -11,19 +11,26 @@ const Page = () => {
         fetchMessage,
     } = useAppState()
     const pageId = router.query.pageId
-    const [ arweaveId, setAreaveId ] = useState<string | null>(null)
+    const [ ipfsId, setIpfsId ] = useState<string | null>(null)
+    const [ arweaveId, setArweaveId] = useState<string | null>(null)
     const [ isLoaded, setIsloaded ] = useState(false)
     const [ markDownContent, SetMarkDownContent ] = useState<string | null>(null)
     async function fetchISCN(iscnId: string) {
         const iscn = await fetchMessage(iscnId)
-        for (const fingerprint of (iscn?.data.contentFingerprints || [])) {
-            if (/ar:\/\//.test(fingerprint)) setAreaveId(fingerprint.replace('ar://', ''))
-        }
+        setArweaveId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ar://'))
+        setIpfsId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ipfs://'))
     }
 
-    async function getArweaveContent(arweaveId: string) {
+    function getIdByProtocal(fingerprints: string[], protocal: string) {
+        for (const fingerprint of fingerprints) {
+            if ( fingerprint.startsWith(protocal)) return fingerprint.replace(protocal, '')
+        }
+        return null
+    }
+
+    async function getArweaveContent(ipfsId: string) {
         try {
-            const res = await downloadArweave(arweaveId)
+            const res = await downloadIpfs(ipfsId)
             SetMarkDownContent(res.data)
         } catch (error) {
             console.log(error)
@@ -36,8 +43,8 @@ const Page = () => {
     }, [pageId])
 
     useEffect(() => {
-        if (arweaveId) getArweaveContent(arweaveId)
-    }, [arweaveId])
+        if (ipfsId) getArweaveContent(ipfsId)
+    }, [ipfsId])
 
     const htmlContent = () => {
         if (isLoaded) {
