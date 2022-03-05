@@ -52,7 +52,7 @@ const DashboardPages = (props: any) => {
 
     return (
         <Layout>
-            <div className="max-w-md mx-auto py-24 ">
+            <div className="max-w-md mx-auto py-24 px-4">
                 <div className="text-center flex items-center justify-between">
                     <Link href="/dashboard/create-page">
                         <a className="w-64 block primary-btn">

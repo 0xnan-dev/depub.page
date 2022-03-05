@@ -38,7 +38,7 @@ const CreatePage = () => {
     }
     return (
         <Layout>
-            <div className="max-w-2xl mx-auto py-5">
+            <div className="max-w-2xl mx-auto p-4">
                 <ReactMde
                     value={value}
                     onChange={setValue}
@@ -48,7 +48,7 @@ const CreatePage = () => {
                     generateMarkdownPreview={markdown => Promise.resolve(converter.makeHtml(markdown)) }
                 />
             </div>
-            <div className="max-w-2xl mx-auto text-center flex justify-between">
+            <div className="max-w-2xl mx-auto text-center flex justify-between px-4">
                 <Link href="/dashboard">
                     <a className="white-btn">Back</a>
                 </Link>

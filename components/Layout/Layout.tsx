@@ -14,9 +14,9 @@ const Layout: FC = ({ children, }) => (
         </Head>
 
 
-        <div>
+        <div className="min-h-screen flex relative">
             <Navbar></Navbar>
-            <main className="height-f">
+            <main className="grow pt-16">
                 { children }
             </main>
         </div>

@@ -78,12 +78,13 @@ const Page = () => {
 
     return (
         <Layout>
-            <div className="max-w-lg mx-auto py-24">
-
-                { htmlContent() }
-
-                <MetaLinks links={metaLinks}></MetaLinks>
-
+            <div className="max-w-lg mx-auto min-h-full flex flex-col p-4">
+                <div className="grow">
+                    { htmlContent() }
+                </div>
+                <div className="py-3">
+                    <MetaLinks  links={metaLinks}></MetaLinks>
+                </div>
             </div>
         </Layout>
     )
