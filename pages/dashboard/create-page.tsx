@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import ReactMde from "react-mde"
 import "react-mde/lib/styles/css/react-mde-all.css"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks";
@@ -18,7 +18,17 @@ const toolbar = [
     ['link', ],
 ]
 
-const CreatePage = () => {
+const PublishBtn: FC<{
+    onSubmit: Function,
+}> = ({ onSubmit }) => {
+    const { isLoading, } = useAppState();
+
+    return (
+        <Button className=" primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
+    )
+}
+
+const CreatePage: FC = () => {
     const { status, } = useSigningCosmWasmClient()
     const [value, setValue] = useState("**Hello world!!!**");
     const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
@@ -36,8 +46,12 @@ const CreatePage = () => {
             router.push('/dashboard')
         }
     }
+
     return (
-        <LoginedLayout>
+        <LoginedLayout
+            navbarAction={<PublishBtn onSubmit={onSubmit}></PublishBtn>}
+            backUrl="/dashboard"
+        >
             <div className="max-w-2xl mx-auto p-4">
                 <ReactMde
                     value={value}
@@ -49,10 +63,7 @@ const CreatePage = () => {
                 />
             </div>
             <div className="max-w-2xl mx-auto text-center flex justify-between px-4">
-                <Link href="/dashboard">
-                    <a className="white-btn">Back</a>
-                </Link>
-                <Button className="w-64 primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
+
             </div>
         </LoginedLayout>
     )

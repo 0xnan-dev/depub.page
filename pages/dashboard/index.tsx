@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { LoginedLayout } from "../../components/Layout"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks"
 import { ISCNRecord } from "@likecoin/iscn-js"
@@ -7,11 +7,25 @@ import Button from "../../components/Common/Button"
 import { useRouter } from "next/router"
 
 
+const LogoutBtn: FC = (props: any) => {
+    const {
+        disconnect,
+    } = useSigningCosmWasmClient()
+    const router = useRouter()
+
+    async function logout() {
+        await disconnect()
+        router.push('/')
+    }
+    return (
+        <Button className="white-btn" onClick={logout}>Logout</Button>
+    )
+}
+
 const DashboardPages = (props: any) => {
     const {
         walletAddress,
         status,
-        disconnect,
     } = useSigningCosmWasmClient()
     const {
         fetchMessagesByOwner,
@@ -22,10 +36,6 @@ const DashboardPages = (props: any) => {
     async function fetchPages(address: string) {
         let results = await fetchMessagesByOwner(address)
         if (results) setPages(results)
-    }
-    async function logout() {
-        await disconnect()
-        router.push('/')
     }
 
     useEffect(() => {
@@ -51,15 +61,15 @@ const DashboardPages = (props: any) => {
     })
 
     return (
-        <LoginedLayout>
+        <LoginedLayout navbarAction={<LogoutBtn></LogoutBtn>}>
             <div className="max-w-md mx-auto py-10 px-4">
                 <div className="text-center flex items-center justify-between">
                     <Link href="/dashboard/create-page">
-                        <a className="w-64 block primary-btn">
+                        <a className="w-full block primary-btn">
                             Create Entry
                         </a>
                     </Link>
-                    <Button className="white-btn" onClick={logout}>Logout</Button>
+                    
                 </div>
                 {PageList}
             </div>
