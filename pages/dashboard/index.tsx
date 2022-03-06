@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
-import Layout from "../../components/Layout"
+import { LoginedLayout } from "../../components/Layout"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks"
 import { ISCNRecord } from "@likecoin/iscn-js"
 import Button from "../../components/Common/Button"
@@ -51,8 +51,8 @@ const DashboardPages = (props: any) => {
     })
 
     return (
-        <Layout>
-            <div className="max-w-md mx-auto py-24 px-4">
+        <LoginedLayout>
+            <div className="max-w-md mx-auto py-10 px-4">
                 <div className="text-center flex items-center justify-between">
                     <Link href="/dashboard/create-page">
                         <a className="w-64 block primary-btn">
@@ -63,7 +63,7 @@ const DashboardPages = (props: any) => {
                 </div>
                 {PageList}
             </div>
-        </Layout>
+        </LoginedLayout>
     )
 }
 

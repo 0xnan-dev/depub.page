@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import Layout from '../components/Layout'
+import { Layout } from '../components/Layout'
 import { useSigningCosmWasmClient } from '../hooks';
 import ConnectWallet  from '../components/ConnectWallet';
 import { useEffect } from 'react';

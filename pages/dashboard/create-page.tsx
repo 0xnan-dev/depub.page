@@ -5,7 +5,7 @@ import { useAppState, useSigningCosmWasmClient } from "../../hooks";
 import converter from "../../utils/showdown";
 import Button from '../../components/Common/Button'
 
-import Layout from '../../components/Layout'
+import { LoginedLayout } from '../../components/Layout'
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -37,7 +37,7 @@ const CreatePage = () => {
         }
     }
     return (
-        <Layout>
+        <LoginedLayout>
             <div className="max-w-2xl mx-auto p-4">
                 <ReactMde
                     value={value}
@@ -54,7 +54,7 @@ const CreatePage = () => {
                 </Link>
                 <Button className="w-64 primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
             </div>
-        </Layout>
+        </LoginedLayout>
     )
 }
 

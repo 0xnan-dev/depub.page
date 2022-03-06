@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
+import { Layout } from "../components/Layout";
 import { useAppState } from "../hooks";
 import { downloadIpfs } from "../utils/arweave/api";
 import ReactMarkdown from "react-markdown";

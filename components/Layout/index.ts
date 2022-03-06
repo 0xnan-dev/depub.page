@@ -1,3 +1,6 @@
-import Layout from  './Layout'
+import { Layout, LoginedLayout } from  './Layout'
 
-export default Layout
+export {
+    Layout,
+    LoginedLayout
+}
