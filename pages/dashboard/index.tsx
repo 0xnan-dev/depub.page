@@ -4,6 +4,7 @@ import { LoginedLayout } from "../../components/Layout"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks"
 import { ISCNRecord } from "@likecoin/iscn-js"
 import Button from "../../components/Common/Button"
+import { PageSummary } from "../../components/PageList"
 import { useRouter } from "next/router"
 
 
@@ -47,17 +48,13 @@ const DashboardPages = (props: any) => {
     }, [status, router])
 
 
-    const PageList = pages.map(p => {
+    const pagesJson = pages.map(p => {
         const iscnId = p.data['@id'] as string
-        if (!iscnId) return ''
-
-        return (
-            <Link key={iscnId} href={`/page?pageId=${encodeURIComponent(iscnId)}`}>
-                <a className="mx-auto block p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-70">
-                    {p.data.contentMetadata.description}
-                </a> 
-            </Link>
-        )
+        return {
+            key: iscnId,
+            link: `/page?pageId=${encodeURIComponent(iscnId)}`,
+            description: p.data.contentMetadata.description,
+        }
     })
 
     return (
@@ -71,7 +68,12 @@ const DashboardPages = (props: any) => {
                     </Link>
                     
                 </div>
-                {PageList}
+                {pagesJson.map((p) => 
+                    <PageSummary 
+                        key={p.key} 
+                        link={p.link} description={p.description}
+                    ></PageSummary>
+                )}
             </div>
         </LoginedLayout>
     )
