@@ -1,22 +1,13 @@
 import { FC, useEffect, useState } from "react"
-import ReactMde from "react-mde"
-import "react-mde/lib/styles/css/react-mde-all.css"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks";
-import converter from "../../utils/showdown";
 import Button from '../../components/Common/Button'
+import QuillEditor from "../../components/Editor/Quill";
+import PageContent from "../../components/Page/Content";
 
 import { LoginedLayout } from '../../components/Layout'
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 
-const toolbar = [ 
-    // ['header', 'bold', 'italic', 'strikethrough'],
-    // ['link', 'quote', 'code'],
-    // ['unordered-list', 'ordered-list', 'checked-list'],
-    ['header', 'bold', 'italic', ],
-    ['link', ],
-]
 
 const PublishBtn: FC<{
     onSubmit: Function,
@@ -30,9 +21,8 @@ const PublishBtn: FC<{
 
 const CreatePage: FC = () => {
     const { status, } = useSigningCosmWasmClient()
-    const [value, setValue] = useState("**Hello world!!!**");
-    const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
-    const { isLoading, postMessage, fetchUser } = useAppState();
+    const [value, setValue] = useState("");
+    const { isLoading, postMessage, } = useAppState();
     const { offlineSigner } = useSigningCosmWasmClient();
     const router = useRouter()
 
@@ -52,15 +42,15 @@ const CreatePage: FC = () => {
             navbarAction={<PublishBtn onSubmit={onSubmit}></PublishBtn>}
             backUrl="/dashboard"
         >
-            <div className="max-w-2xl mx-auto p-4">
-                <ReactMde
-                    value={value}
-                    onChange={setValue}
-                    selectedTab={selectedTab}
-                    onTabChange={setSelectedTab}
-                    toolbarCommands={toolbar}
-                    generateMarkdownPreview={markdown => Promise.resolve(converter.makeHtml(markdown)) }
-                />
+            <div className="max-w-screen-xl mx-auto p-4">
+                <div className="flex">
+                    <div className="w-1/2">
+                        <QuillEditor onChange={setValue}></QuillEditor>
+                    </div>
+                    <div className="w-1/2 pt-10">
+                        <PageContent markDownContent={value} isLoaded={true}></PageContent>
+                    </div>
+                </div>
             </div>
             <div className="max-w-2xl mx-auto text-center flex justify-between px-4">
 

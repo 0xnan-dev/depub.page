@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Layout } from "../components/Layout";
 import { useAppState } from "../hooks";
 import { downloadIpfs } from "../utils/arweave/api";
-import ReactMarkdown from "react-markdown";
 import { MetaLinks } from "../components/Page";
 import { MetaLinkProps } from "../components/Page/MetaLink";
+import PageContent from '../components/Page/Content';
 
 const Page = () => {
     const router = useRouter();
@@ -48,17 +48,7 @@ const Page = () => {
         if (ipfsId) getArweaveContent(ipfsId)
     }, [ipfsId])
 
-    const htmlContent = () => {
-        if (isLoaded) {
-            return (
-                markDownContent
-                    ? <ReactMarkdown>{markDownContent}</ReactMarkdown>
-                    : <p>Page Not Exist</p>
-            )
-        } else {
-            return (<p>Loading ... </p>)
-        }
-    }
+
     const metaLinks: MetaLinkProps[] = []
     if (arweaveId) {
         metaLinks.push({
@@ -80,7 +70,7 @@ const Page = () => {
         <Layout>
             <div className="max-w-lg mx-auto min-h-full flex flex-col p-4">
                 <div className="grow">
-                    { htmlContent() }
+                    <PageContent isLoaded={isLoaded} markDownContent={markDownContent}></PageContent>
                 </div>
                 <div className="py-3">
                     <MetaLinks  links={metaLinks}></MetaLinks>

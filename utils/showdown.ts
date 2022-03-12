@@ -3,6 +3,7 @@ import * as Showdown from "showdown";
 const converter = new Showdown.Converter({
     // tables: true,
     simplifiedAutoLink: true,
+    // simpleLineBreaks: true,
     // strikethrough: true,
     // tasklists: true
 });
