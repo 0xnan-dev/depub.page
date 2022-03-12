@@ -70,7 +70,11 @@ const Page = () => {
         <Layout>
             <div className="max-w-lg mx-auto min-h-full flex flex-col p-4">
                 <div className="grow">
-                    <PageContent isLoaded={isLoaded} markDownContent={markDownContent}></PageContent>
+                    <PageContent
+                        isLoaded={isLoaded}
+                        markDownContent={markDownContent}
+                        notFoundMessage="Page Not Found"
+                    ></PageContent>
                 </div>
                 <div className="py-3">
                     <MetaLinks  links={metaLinks}></MetaLinks>
