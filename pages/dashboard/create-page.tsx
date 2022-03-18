@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { useAppState, useSigningCosmWasmClient } from "../../hooks";
 import Button from '../../components/Common/Button'
 import QuillEditor from "../../components/Editor/Quill";
@@ -15,14 +15,15 @@ const PublishBtn: FC<{
     const { isLoading, } = useAppState();
 
     return (
-        <Button className=" primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
+        <Button className="ml-2 primary-btn" isLoading={isLoading} onClick={onSubmit}>Submit</Button>
     )
 }
 
 const CreatePage: FC = () => {
     const { status, } = useSigningCosmWasmClient()
     const [value, setValue] = useState("");
-    const { isLoading, postMessage, } = useAppState();
+    const [preview, setPreview] = useState(false)
+    const { postMessage, } = useAppState();
     const { offlineSigner } = useSigningCosmWasmClient();
     const router = useRouter()
 
@@ -30,30 +31,51 @@ const CreatePage: FC = () => {
         if (status == 'guest') router.push('/')
     }, [status, router])
 
-    async function onSubmit() {
-        if (offlineSigner) {
-            await postMessage(offlineSigner, value)
-            router.push('/dashboard')
+
+    const ActionButton = useMemo(() => {
+        async function onSubmit() {
+            if (offlineSigner) {
+                try {
+                    await postMessage(offlineSigner, value)
+                    router.push('/dashboard')
+                } catch (error) {
+                    // console.error(error)
+                }
+            }
+        }
+        const previewBtnClass = value? "primary-bordered-btn": "disabled-btn"
+
+        if (preview) {
+            return <PublishBtn onSubmit={onSubmit}></PublishBtn>
+        } else {
+            return <Button className={`${previewBtnClass} ml-2`} onClick={() => setPreview(true)} disabled={!value}>Preview</Button>
+        }
+    }, [preview, value])
+
+    function onEditorChange(val: string) {
+        setValue(val.trim())
+    }
+
+    function onBack() {
+        if (preview) {
+            setPreview(false)
+        } else {
+            router.back()
         }
     }
 
     return (
         <LoginedLayout
-            navbarAction={<PublishBtn onSubmit={onSubmit}></PublishBtn>}
-            backUrl="/dashboard"
+            navbarAction={ActionButton}
+            onBack={onBack}
         >
             <div className="max-w-screen-xl mx-auto p-4">
-                <div className="flex">
-                    <div className="w-1/2">
-                        <QuillEditor onChange={setValue}></QuillEditor>
-                    </div>
-                    <div className="w-1/2 pt-10">
-                        <PageContent markDownContent={value} isLoaded={true}></PageContent>
-                    </div>
+                <div className={preview? "hidden": ""}>
+                    <QuillEditor onChange={onEditorChange}></QuillEditor>
                 </div>
-            </div>
-            <div className="max-w-2xl mx-auto text-center flex justify-between px-4">
-
+                <div className={preview? "": "hidden"}>
+                    <PageContent markDownContent={value} isLoaded={true}></PageContent>
+                </div>
             </div>
         </LoginedLayout>
     )

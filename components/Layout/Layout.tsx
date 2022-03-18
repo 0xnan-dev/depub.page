@@ -1,4 +1,4 @@
-import { FC, ReactElement } from "react";
+import { FC, MouseEventHandler, ReactElement } from "react";
 import Head from 'next/head'
 
 import { Navbar, LoginedNavbar } from './Navbar'
@@ -26,8 +26,8 @@ const Layout: FC = ({ children, }) => (
 
 const LoginedLayout: FC<{
     navbarAction?: ReactElement,
-    backUrl?: string,
-}> = ({ children, navbarAction, backUrl }) => {
+    onBack?: MouseEventHandler,
+}> = ({ children, navbarAction, onBack }) => {
     return (
         <div>
             <Head>
@@ -40,7 +40,7 @@ const LoginedLayout: FC<{
 
 
             <div className="min-h-screen flex relative">
-                <LoginedNavbar backUrl={backUrl}>{navbarAction}</LoginedNavbar>
+                <LoginedNavbar onBack={onBack}>{navbarAction}</LoginedNavbar>
                 <main className="grow pt-16">
                     { children }
                 </main>

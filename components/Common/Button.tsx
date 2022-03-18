@@ -6,7 +6,7 @@ const Button = (props: any) => {
     return (
         <button
             type={type}
-            disabled={props.isLoading}
+            disabled={props.isLoading || props.disabld}
             className={props.className}
             onClick={props.onClick}>
                 {props.isLoading? <Loading/>: props.children}
