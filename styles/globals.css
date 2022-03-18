@@ -3,11 +3,22 @@
 @tailwind utilities;
 @import 'editor';
 
+@layer base {
+  @font-face {
+    font-family: "Montserrat";
+    src: url("./fonts/Montserrat-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Montserrat-Bold";
+    src: url("./fonts/Montserrat-Bold.ttf");
+  }
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
