@@ -58,7 +58,6 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     error: string | null;
     fetchUser: (dtagOrAddress: string, noCache?: boolean) => Promise<User | null>;
     fetchMessage: (iscnId: string) => Promise<ISCNRecord | null>;
-    // fetchMessages: (previousId?: string, noCache?: boolean) => Promise<Message[] | null>;
     fetchMessages: (previousId?: string, noCache?: boolean) => Promise<ISCNRecord[] | null>;
     fetchMessagesByTag: (
       tag: string,
@@ -66,16 +65,6 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
       noCache?: boolean
     ) => Promise<Message[] | null>;
     fetchMessagesByOwner: (walletAddress: string) => Promise<ISCNRecord[] | null>;
-    // fetchMessagesByOwner: (
-    //   owner: string,
-    //   previousId?: string,
-    //   noCache?: boolean
-    // ) => Promise<
-    //   | (User & {
-    //       messages: Message[];
-    //     })
-    //   | null
-    // >;
     postMessage: (
       offlineSigner: OfflineSigner,
       message: string,
@@ -180,60 +169,6 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
       []
     );
   
-    // const fetchMessagesByOwner = useCallback(
-    //   async (
-    //     owner: string,
-    //     previousId?: string,
-    //     noCache?: boolean
-    //   ): Promise<
-    //     | (User & {
-    //         messages: Message[];
-    //       })
-    //     | null
-    //   > => {
-    //     debug('fetchMessagesByOwner(owner: %s, previousId: %s)', owner, previousId);
-  
-    //     dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
-  
-    //     try {
-    //       const { data } = await axios.post<{ data: MessagesByOwnerResponse }>(
-    //         GRAPHQL_URL,
-    //         {
-    //           variables: {
-    //             dtagOrAddress: owner,
-    //             previousId,
-    //             limit: ROWS_PER_PAGE,
-    //           },
-    //           query: GRAPHQL_QUERY_MESSAGES_BY_USER,
-    //         },
-    //         {
-    //           headers: {
-    //             'Access-Control-Allow-Origin': '*',
-    //             ...(noCache && noCacheHeaders),
-    //           },
-    //         }
-    //       );
-  
-    //       dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
-  
-    //       if (data && data.data.getUser) {
-    //         return data.data.getUser;
-    //       }
-    //     } catch (ex) {
-    //       debug('fetchMessagesByOwner() -> error: %O', ex);
-  
-    //       dispatch({
-    //         type: ActionType.SET_ERROR,
-    //         error: 'Fail to fetch messages, please try again later.',
-    //       });
-  
-    //     }
-  
-    //     return null;
-    //   },
-    //   []
-    // );
-
     const fetchMessage = useCallback(
       async (iscnId: string): Promise<ISCNRecord | null> => {
         debug('fetchMessage()');
@@ -301,49 +236,6 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
       []
     );   
   
-    // const fetchMessages = useCallback(
-    //   async (previousId?: string, noCache?: boolean): Promise<Message[] | null> => {
-    //     debug('fetchMessages(previousId: %s)', previousId);
-  
-    //     dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
-  
-    //     try {
-    //       const { data } = await axios.post<{ data: MessagesQueryResponse }>(
-    //         GRAPHQL_URL,
-    //         {
-    //           variables: {
-    //             previousId: previousId || null, // graphql not accepts undefined
-    //             limit: ROWS_PER_PAGE,
-    //           },
-    //           query: GRAPHQL_QUERY_MESSAGES,
-    //         },
-    //         {
-    //           headers: {
-    //             'Access-Control-Allow-Origin': '*',
-    //             ...(noCache && noCacheHeaders),
-    //           },
-    //         }
-    //       );
-  
-    //       dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
-  
-    //       if (data && data.data.messages) {
-    //         return data.data.messages;
-    //       }
-    //     } catch (ex) {
-    //       debug('fetchMessages() -> error: %O', ex);
-  
-    //       dispatch({
-    //         type: ActionType.SET_ERROR,
-    //         error: 'Fail to fetch messages, please try again later.',
-    //       });
-  
-    //     }
-  
-    //     return null;
-    //   },
-    //   []
-    // );
   
     const fetchMessagesByTag = useCallback(
       async (tag: string, previousId?: string, noCache?: boolean): Promise<Message[] | null> => {

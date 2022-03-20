@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Layout } from "../components/Layout";
 import { useAppState } from "../hooks";
 import { downloadIpfs } from "../utils/arweave/api";
@@ -17,11 +17,6 @@ const Page = () => {
     const [ arweaveId, setArweaveId] = useState<string | null>(null)
     const [ isLoaded, setIsloaded ] = useState(false)
     const [ markDownContent, SetMarkDownContent ] = useState<string | null>(null)
-    async function fetchISCN(iscnId: string) {
-        const iscn = await fetchMessage(iscnId)
-        setArweaveId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ar://'))
-        setIpfsId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ipfs://'))
-    }
 
     function getIdByProtocal(fingerprints: string[], protocal: string) {
         for (const fingerprint of fingerprints) {
@@ -40,31 +35,44 @@ const Page = () => {
         setIsloaded(true)           
     }
 
-    useEffect(() => {
-        if (typeof pageId === 'string') fetchISCN(pageId)
+    const iscnUrl = useMemo(() => {
+        return pageId? `iscn://likecoin-chain/${pageId}`: ''
     }, [pageId])
+
+    useEffect(() => {
+        async function fetchISCN(iscnId: string) {
+            const iscn = await fetchMessage(iscnId)
+            setArweaveId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ar://'))
+            setIpfsId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ipfs://'))
+        }
+
+        if (iscnUrl) fetchISCN(iscnUrl)
+    }, [iscnUrl, fetchMessage])
 
     useEffect(() => {
         if (ipfsId) getArweaveContent(ipfsId)
     }, [ipfsId])
 
 
-    const metaLinks: MetaLinkProps[] = []
-    if (arweaveId) {
-        metaLinks.push({
-            link: `https://viewblock.io/arweave/tx/${arweaveId}`,
-            label: 'ARWEAVE TX',
-            value: arweaveId,
-        })
-    }
-    if (pageId && typeof pageId == 'string') {
-        const encodedIscn = encodeURIComponent(pageId)
-        metaLinks.push({
-            link: `https://app.like.co/view/${encodedIscn}`,
-            label: 'ISCN',
-            value: pageId.replace('iscn://', ''),
-        })
-    }
+    const metaLinks: MetaLinkProps[] = useMemo(() => {
+        const results = []
+        if (arweaveId) {
+            results.push({
+                link: `https://viewblock.io/arweave/tx/${arweaveId}`,
+                label: 'ARWEAVE TX',
+                value: arweaveId,
+            })
+        }
+        if (pageId && typeof pageId == 'string') {
+            const encodedIscn = encodeURIComponent(pageId)
+            results.push({
+                link: `https://app.like.co/view/${encodedIscn}`,
+                label: 'ISCN',
+                value: pageId.replace('iscn://', ''),
+            })
+        }
+        return results
+    }, [arweaveId, pageId])
 
     return (
         <Layout>
