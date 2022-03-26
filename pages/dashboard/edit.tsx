@@ -7,6 +7,7 @@ import { downloadIpfs } from "../../utils/arweave/api";
 
 import { LoginedLayout } from '../../components/Layout'
 import { useRouter } from "next/router";
+import { ISCNRecord } from "@likecoin/iscn-js";
 
 
 
@@ -20,10 +21,11 @@ const PublishBtn: FC<{
     )
 }
 
-const CreatePage: FC = () => {
+const EditPage: FC = () => {
     const { status, } = useSigningCosmWasmClient()
     const router = useRouter()
     const pageId = router.query.pageId
+    const [ iscn, setIscn] = useState< ISCNRecord | null >(null)
     const [ ipfsId, setIpfsId ] = useState<string | null>(null)
     const [value, setValue] = useState("");
     const [ isLoaded, setIsloaded ] = useState(false)
@@ -58,8 +60,9 @@ const CreatePage: FC = () => {
 
     useEffect(() => {
         async function fetchISCN(iscnId: string) {
-            const iscn = await fetchMessage(iscnId)
-            setIpfsId(getIdByProtocal(iscn?.data.contentFingerprints || [], 'ipfs://'))
+            const result = await fetchMessage(iscnId)
+            setIscn(result)
+            setIpfsId(getIdByProtocal(result?.data.contentFingerprints || [], 'ipfs://'))
         }
 
         if (iscnUrl) fetchISCN(iscnUrl)
@@ -74,7 +77,8 @@ const CreatePage: FC = () => {
         async function onSubmit() {
             if (offlineSigner) {
                 try {
-                    await postMessage(offlineSigner, value)
+                    const version = iscn?.data.contentMetadata.version
+                    await postMessage(offlineSigner, value, version)
                     router.push('/dashboard')
                 } catch (error) {
                     // console.error(error)
@@ -119,4 +123,4 @@ const CreatePage: FC = () => {
     )
 }
 
-export default CreatePage
+export default EditPage

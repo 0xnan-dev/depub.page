@@ -283,7 +283,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     );
   
     const postMessage = useCallback(
-      async (offlineSigner: OfflineSigner, message: string, files?: string | File[]) => {
+      async (offlineSigner: OfflineSigner, message: string, files?: string | File[], version: Number = 1) => {
         debug('postMessage() -> message: %s', message);
   
         dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
@@ -328,7 +328,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
             type: 'Article',
             author: wallet.address,
             description: messageTxt,
-            version: 1,
+            version: version,
             usageInfo: 'https://creativecommons.org/licenses/by/4.0',
           };
   
