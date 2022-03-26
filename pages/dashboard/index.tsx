@@ -36,6 +36,7 @@ const DashboardPages = (props: any) => {
 
     async function fetchPages(address: string) {
         let results = await fetchMessagesByOwner(address)
+        console.log(results)
         if (results) setPages(results)
     }
 
