@@ -9,9 +9,10 @@ const QuillNoSSRWrapper = dynamic(
 const QuillEditor: FC<{
     value?: string,
     onChange: (val: string) => void,
-}> = ({ value, onChange }) => {
+    disabled?: boolean,
+}> = ({ value, onChange, disabled, }) => {
     return (
-        <QuillNoSSRWrapper onChange={onChange}></QuillNoSSRWrapper>
+        <QuillNoSSRWrapper value={value} disabled={disabled} onChange={onChange}></QuillNoSSRWrapper>
     )
 }
 

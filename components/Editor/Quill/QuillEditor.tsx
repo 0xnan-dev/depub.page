@@ -2,6 +2,7 @@ import Quill from 'quill'
 import 'quill//dist/quill.core.css'
 import 'quill//dist/quill.snow.css'
 import { FC, useEffect, useRef, } from 'react'
+import markdownToDelta from "markdown-to-quill-delta";
 import converter from "../../../utils/showdown";
 
 const quillOption = {
@@ -19,7 +20,8 @@ const quillOption = {
 const QuillEditor: FC<{
     value?: string,
     onChange: (val: string) => void,
-}> = ({ value, onChange, }) => {
+    disabled?: boolean,
+}> = ({ value, onChange, disabled, }) => {
     const el = useRef(null)
     let editor = useRef<Quill|null>(null)
     useEffect(() => {
@@ -30,12 +32,34 @@ const QuillEditor: FC<{
         }
     }, [el])
 
-    function onTextChange(delta: any) {
-        // console.log(delta)
+    useEffect(() => {
+        const content = getEditorContent()?.replace(/(\r\n|\n|\r)/gm, '')
+
+        if (!content && editor.current && value) {
+            const delta: any = markdownToDelta(value)
+            editor.current.setContents(delta)
+        }
+    }, [value])
+
+    useEffect(() => {
+        if (!editor.current) return
+        if (disabled) {
+            editor.current.disable() 
+        } else {
+            editor.current.enable() 
+        }
+    }, [disabled])
+
+    function getEditorContent() {
+        if (!editor.current) return null
+        const htmlContent = editor.current.root.innerHTML
+        return converter.makeMarkdown(htmlContent).replaceAll('<br>', '\n')
+    }
+
+    function onTextChange() {
         if (editor.current) {
-            const htmlContent = editor.current.root.innerHTML
-            const content = converter.makeMarkdown(htmlContent).replaceAll('<br>', '\n')
-            onChange(content)
+            const content = getEditorContent()
+            if (content) onChange(content)
         }
     }
 

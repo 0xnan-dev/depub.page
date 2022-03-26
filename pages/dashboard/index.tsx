@@ -36,7 +36,6 @@ const DashboardPages = (props: any) => {
 
     async function fetchPages(address: string) {
         let results = await fetchMessagesByOwner(address)
-        console.log(results)
         if (results) setPages(results)
     }
 
@@ -54,7 +53,7 @@ const DashboardPages = (props: any) => {
         if (iscnId) iscnId = iscnId.replace('iscn://likecoin-chain/', '')
         return {
             key: iscnId,
-            link: `/page?pageId=${iscnId}`,
+            pageId: iscnId,
             description: p?.data?.contentMetadata?.description,
             recordTime: p?.data?.recordTimestamp,
         }
@@ -74,7 +73,8 @@ const DashboardPages = (props: any) => {
                 {pagesJson.map((p) => 
                     <PageSummary 
                         key={p.key} 
-                        link={p.link} description={p.description} recordTime={p.recordTime}
+                        description={p.description} recordTime={p.recordTime}
+                        pageId={p.pageId}
                     ></PageSummary>
                 )}
             </div>
