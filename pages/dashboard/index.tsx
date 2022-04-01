@@ -56,6 +56,7 @@ const DashboardPages = (props: any) => {
             pageId: iscnId,
             description: p?.data?.contentMetadata?.description,
             recordTime: p?.data?.recordTimestamp,
+            version: p?.data.contentMetadata.version,
         }
     })
 
@@ -74,7 +75,7 @@ const DashboardPages = (props: any) => {
                     <PageSummary 
                         key={p.key} 
                         description={p.description} recordTime={p.recordTime}
-                        pageId={p.pageId}
+                        pageId={p.pageId} version={p.version}
                     ></PageSummary>
                 )}
             </div>

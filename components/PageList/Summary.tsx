@@ -9,7 +9,8 @@ const PageSummary: FC<{
     pageId: string,
     description: string,
     recordTime: any,
-}> = ({ description, recordTime, pageId }) => {
+    version?: number,
+}> = ({ description, recordTime, pageId, version }) => {
     const displayRecordTime = DateTime.fromISO(recordTime).toLocaleString()
     const router = useRouter()
 
@@ -22,7 +23,12 @@ const PageSummary: FC<{
         <Link href={`/page?pageId=${pageId}`} passHref>
             <div className="mx-auto mb-3 block p-6 bg-white rounded-lg border border-gray-200 shadow-md cursor-pointer">
                 <div className="flex justify-between items-center">
-                    <p className="text-xs text-right text-gray-500">{displayRecordTime}</p>
+                    <div className="flex items-center">
+                        <p className="text-xs text-right text-gray-500">{displayRecordTime}</p>
+                        <span className="bg-purple-300 text-black text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3">
+                            v: {version}
+                        </span>
+                    </div>
                     <Dropdown>
                         <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
                             <li>
