@@ -68,7 +68,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     postMessage: (
       offlineSigner: OfflineSigner,
       message: string,
-      files?: string | File[]
+      version?: number,
     ) => Promise<BroadcastTxSuccess | TxRaw | null>;
   }
   
@@ -283,7 +283,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
     );
   
     const postMessage = useCallback(
-      async (offlineSigner: OfflineSigner, message: string, files?: string | File[], version: Number = 1) => {
+      async (offlineSigner: OfflineSigner, message: string, version: Number = 1) => {
         debug('postMessage() -> message: %s', message);
   
         dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });

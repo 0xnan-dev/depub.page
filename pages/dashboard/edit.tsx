@@ -78,10 +78,10 @@ const EditPage: FC = () => {
             if (offlineSigner) {
                 try {
                     const version = iscn?.data.contentMetadata.version
-                    await postMessage(offlineSigner, value, version)
+                    await postMessage(offlineSigner, value, version + 1)
                     router.push('/dashboard')
                 } catch (error) {
-                    // console.error(error)
+                    console.error(error)
                 }
             }
         }
