@@ -174,6 +174,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
         debug('fetchMessage()');
         dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
         try {
+          await queryClient.connect(PUBLIC_RPC_ENDPOINT)
           const res = await queryClient.queryRecordsById(iscnId)
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
           return res?.records[0] || null
@@ -216,6 +217,7 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
         dispatch({ type: ActionType.SET_IS_LOADING, isLoading: true });
   
         try {
+          await queryClient.connect(PUBLIC_RPC_ENDPOINT)
           const res = await queryClient.queryRecordsByFingerprint(ISCN_FINGERPRINT)
           debug(res)
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });

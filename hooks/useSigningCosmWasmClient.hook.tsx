@@ -80,10 +80,10 @@ export const getChainInfo = () => {
   };
 
   const testnet = {
-    chainId: 'likecoin-public-testnet-3',
+    chainId: 'likecoin-public-testnet-5',
     chainName: 'LikeCoin public test chain',
-    rpc: 'https://likecoin-public-testnet-rpc.nnkken.dev/',
-    rest: 'https://likecoin-public-testnet-lcd.nnkken.dev/',
+    rpc: 'https://likecoin-public-testnet-5.oursky.dev/rpc/',
+    rest: 'https://likecoin-public-testnet-5.oursky.dev/',
     stakeCurrency: {
       coinDenom: 'EKIL',
       coinMinimalDenom: 'nanoekil',
@@ -155,6 +155,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     try {
       await (window as any).keplr?.experimentalSuggestChain(getChainInfo());
     } catch (ex: any) {
+      debug(ex)
       setError(ex.message);
     }
 

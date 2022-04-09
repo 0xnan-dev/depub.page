@@ -5,6 +5,8 @@ import Debug from 'debug';
 import { estimateArweavePrice, uploadToArweave } from './api';
 import { sendLIKE } from '../';
 
+const PUBLIC_RPC_ENDPOINT = process.env.NEXT_PUBLIC_CHAIN_RPC_ENDPOINT || '';
+
 const debug = Debug('web:arweave');
 const signingClient = new ISCNSigningClient();
 
@@ -48,7 +50,7 @@ export async function submitToArweaveAndISCN(
 
   const iscnMetadataWithArweaveId = { ...iscnMetadata, contentFingerprints };
 
-  await signingClient.setSigner(signer);
+  await signingClient.connectWithSigner(PUBLIC_RPC_ENDPOINT, signer);
 
   const res = await signingClient.createISCNRecord(fromAddress, iscnMetadataWithArweaveId);
 
