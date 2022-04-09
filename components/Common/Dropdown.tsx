@@ -5,7 +5,7 @@ const Dropdown: FC<{
     children,
 }) => {
     const [show, setShow] = useState(false)
-    const ref = useRef<HTMLElement | null>(null)
+    const ref = useRef<HTMLDivElement | null>(null)
 
     const dropdownClass = show? 'absolute top-full right-0': 'hidden'
 

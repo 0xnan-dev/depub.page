@@ -197,7 +197,8 @@ import { getWalletRegistryUrl } from '@walletconnect/utils';
         try {
           let res = await fetchMessages()
           dispatch({ type: ActionType.SET_IS_LOADING, isLoading: false });
-          return (res || []).filter((iscn: ISCNRecord) => iscn.data.author !== walletAddress)
+          debug('fetchMessagesByOwner() -> result: ', res)
+          return (res || []).filter((iscn: ISCNRecord) => iscn.data.contentMetadata.author == walletAddress)
         } catch (ex) {
           debug('fetchMessagesByOwner() -> error: %O', ex);
           dispatch({
