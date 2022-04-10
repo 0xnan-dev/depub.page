@@ -18,7 +18,6 @@ export enum ALERT_TYPE {
 }
 
 export interface AlertState {
-    id: number,
     content: String,
     type: ALERT_TYPE,
 }
@@ -37,40 +36,39 @@ export const AlertContext = createContext<AlertContext>({
 
 type Action = 
     { type: ACTION_TYPE.ADD,  payload: AlertState } |
-    { type: ACTION_TYPE.REMOVE,  payload: { id: number } }
+    { type: ACTION_TYPE.REMOVE,  payload: { content: String } }
 
 
 export const alertReducer: Reducer<AlertState[], Action> = (state, action ) => {
   switch (action.type) {
     case ACTION_TYPE.ADD:
-      return [
-        ...state,
-        {
-          id: +new Date(),
-          content: action.payload.content,
-          type: action.payload.type
-        }
-      ];
+        return [
+            ...state,
+            {
+            content: action.payload.content,
+            type: action.payload.type
+            }
+        ];
     case ACTION_TYPE.REMOVE:
-      return state.filter(t => t.id !== action.payload.id);
+        return state.filter(t => t.content !== action.payload.content);
     default:
-      return state;
+        return state;
   }
 };
 
 const AlertList: FC<{
     alerts: AlertState[],
-    onClose: (id: number) => void,
+    onClose: (content: String) => void,
 }> = ({ alerts, onClose }) => {
 
     return (
         <div className="p-4 fixed t-0 l-0 r-0 w-full z-50">
             {
-                alerts.map((alert) => 
+                alerts.map((alert, i) => 
                     <Alert 
-                        key={alert.id}
+                        key={i}
                         type={alert.type}
-                        onClose={() => onClose(alert.id)}
+                        onClose={() => onClose(alert.content)}
                     >
                         {alert.content}
                     </Alert>
@@ -86,18 +84,19 @@ export const AlertProvider: FC<{ }> = ({ children, }) => {
     const [alerts, alertDispatch] = useReducer(alertReducer, initialState)
     const { error: appError } = useAppState()
 
-    function removeAlert(id: number) {
+    function removeAlert(content: String) {
         alertDispatch({
-            payload: { id },
+            payload: { content },
             type: ACTION_TYPE.REMOVE
         })
     }
 
     function alert(content: String, type?: ALERT_TYPE) {
-        const timestamp = new Date().getTime()
+        // prevent duplicate alert message
+        if (alerts.filter(a => a.content === content).length) return
+
         alertDispatch({
             payload: {
-                id: timestamp,
                 content,
                 type: type || ALERT_TYPE.INFO,
             },
@@ -105,7 +104,7 @@ export const AlertProvider: FC<{ }> = ({ children, }) => {
         })
 
         setTimeout(() => {
-            removeAlert(timestamp)
+            removeAlert(content)
         }, AUTO_REMOVE_SECONDS * 1000);
     }
 

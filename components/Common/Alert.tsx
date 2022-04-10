@@ -13,9 +13,9 @@ const Alert: FC<{
     function getTheme() {
         switch (type) {
             case ALERT_TYPE.ERROR:
-                return 'red'
+                return 'text-red-700 bg-red-100'
             default:
-                return 'purple'
+                return 'text-purple-700 bg-purple-100'
         }
     }
 
@@ -29,14 +29,14 @@ const Alert: FC<{
 
     return (
         <div
-            className={`p-4 mb-4 text-sm rounded-lg text-${theme}-700 bg-${theme}-100 ${className || ''} ${transition}`} 
+            className={`p-4 mb-4 text-sm rounded-lg ${theme} ${className || ''} ${transition}`} 
             role="alert"
         >
             <div className="flex items-center justufy-between">
                 {children}
                 <button 
                     type="button"
-                    className={`ml-auto -mx-1.5 -my-1.5 rounded-lg bg-${theme}-100 text-${theme}-500  p-1.5 inline-flex h-8 w-8`}
+                    className={`ml-auto -mx-1.5 -my-1.5 rounded-lg ${theme} p-1.5 inline-flex h-8 w-8`}
                     aria-label="Close"
                     onClick={() => onClose()}
                 >
