@@ -6,6 +6,7 @@ import Debug from 'debug';
 import { payloadId } from '@walletconnect/utils';
 import { AccountData, OfflineSigner } from '@cosmjs/proto-signing';
 import { SignDoc } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
+import { ALERT_TYPE, useAlertContext } from './useAlert.hook';
 
 const debug = Debug('web:useSigningCosmWasmClient');
 const PUBLIC_RPC_ENDPOINT = process.env.NEXT_PUBLIC_CHAIN_RPC_ENDPOINT || '';
@@ -136,6 +137,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [signingClient, setSigningClient] = useState<SigningCosmWasmClient | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { alert } = useAlertContext()
   const connector = new WalletConnect({
     bridge: 'https://bridge.walletconnect.org',
     qrcodeModal: QRCodeModal,
@@ -358,6 +360,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
     if (typeof (window as any).keplr === 'undefined') {
       setError('Keplr is not available');
+      alert('Connect Error', ALERT_TYPE.ERROR)
 
       return;
     }

@@ -25,7 +25,6 @@ import React, {
   } from '../contants';
   import converter from '../utils/showdown';
   import sanitizeHtml from 'sanitize-html';
-import { getWalletRegistryUrl } from '@walletconnect/utils';
 
   const debug = Debug('web:useAppState');
   const PUBLIC_RPC_ENDPOINT = process.env.NEXT_PUBLIC_CHAIN_RPC_ENDPOINT || '';
