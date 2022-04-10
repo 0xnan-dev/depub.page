@@ -6,6 +6,7 @@ import { downloadIpfs } from "../utils/arweave/api";
 import { MetaLinks } from "../components/Page";
 import { MetaLinkProps } from "../components/Page/MetaLink";
 import PageContent from '../components/Page/Content';
+import { useAlertContext } from "../hooks/useAlert.hook";
 
 const Page = () => {
     const router = useRouter();
@@ -30,7 +31,6 @@ const Page = () => {
             const res = await downloadIpfs(ipfsId)
             SetMarkDownContent(res.data)
         } catch (error) {
-            console.log(error)
         }
         setIsloaded(true)           
     }

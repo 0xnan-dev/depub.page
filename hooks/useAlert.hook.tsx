@@ -1,6 +1,7 @@
 import Debug from 'debug'
 import { FC, useContext, useState, createContext, useReducer, Reducer, useEffect } from 'react'
 import Alert from '../components/Common/Alert'
+import { useAppState } from './useAppState.hook'
 
 const debug = Debug('web:alert')
 
@@ -74,7 +75,7 @@ const AlertList: FC<{
                         {alert.content}
                     </Alert>
                 ) 
-            }
+            }   
         </div>
     )
 
@@ -83,6 +84,7 @@ const AlertList: FC<{
 
 export const AlertProvider: FC<{ }> = ({ children, }) => {
     const [alerts, alertDispatch] = useReducer(alertReducer, initialState)
+    const { error: appError } = useAppState()
 
     function removeAlert(id: number) {
         alertDispatch({
@@ -108,8 +110,8 @@ export const AlertProvider: FC<{ }> = ({ children, }) => {
     }
 
     useEffect(() => {
-        debug('alerts:', alerts)
-    }, [alerts])
+        if (appError) alert(appError, ALERT_TYPE.ERROR)
+    }, [appError])
 
     return (
         <AlertContext.Provider value={ { alert, } }>

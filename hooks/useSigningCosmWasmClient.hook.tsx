@@ -25,7 +25,6 @@ export interface ISigningCosmWasmClientContext {
   signingClient: SigningCosmWasmClient | null;
   offlineSigner: OfflineSigner | null;
   isLoading: boolean;
-  error: string | null;
   connectKeplr: () => Promise<boolean | void>;
   connectWalletConnect: () => Promise<void>;
   disconnect: () => void;
@@ -136,7 +135,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [offlineSigner, setOfflineSigner] = useState<OfflineSigner | null>(null);
   const [signingClient, setSigningClient] = useState<SigningCosmWasmClient | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { alert } = useAlertContext()
   const connector = new WalletConnect({
     bridge: 'https://bridge.walletconnect.org',
@@ -158,7 +156,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       await (window as any).keplr?.experimentalSuggestChain(getChainInfo());
     } catch (ex: any) {
       debug(ex)
-      setError(ex.message);
+      alert(ex.message, ALERT_TYPE.ERROR);
     }
 
     setIsLoading(false);
@@ -193,7 +191,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setOfflineSigner(null);
     setSigningClient(null);
     setIsLoading(false);
-    setError(null);
   };
 
   const initKepr = async () => {
@@ -327,7 +324,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
       }
       if (!connected) setStatus('guest')
     } catch (ex: any) {
-      setError(ex.message);
+      alert(ex.message, ALERT_TYPE.ERROR);
     }
 
     if (!connected) {
@@ -349,7 +346,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     try {
       await initWalletConnect();
     } catch (ex: any) {
-      setError(ex.message);
+      alert(ex.message, ALERT_TYPE.ERROR);
     }
 
     setIsLoading(false);
@@ -359,8 +356,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     debug('connectKeplr()');
 
     if (typeof (window as any).keplr === 'undefined') {
-      setError('Keplr is not available');
-      alert('Connect Error', ALERT_TYPE.ERROR)
+      alert('Keplr is not available', ALERT_TYPE.ERROR);
 
       return;
     }
@@ -373,7 +369,7 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
 
       return await initKepr();
     } catch (ex: any) {
-      setError(ex.message);
+      alert(ex.message, ALERT_TYPE.ERROR);
     }
 
     setIsLoading(false);
@@ -402,7 +398,6 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     walletAddress,
     signingClient,
     isLoading,
-    error,
     offlineSigner,
     connectKeplr,
     connectWalletConnect,
