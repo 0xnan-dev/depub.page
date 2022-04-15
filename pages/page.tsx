@@ -76,7 +76,7 @@ const Page = () => {
 
     return (
         <Layout>
-            <div className="max-w-lg mx-auto min-h-full flex flex-col p-4">
+            <div className=" max-w-screen-xl mx-auto min-h-full flex flex-col p-4">
                 <div className="grow">
                     <PageContent
                         isLoaded={isLoaded}
@@ -84,8 +84,8 @@ const Page = () => {
                         notFoundMessage="Page Not Found"
                     ></PageContent>
                 </div>
-                <div className="py-3">
-                    <MetaLinks  links={metaLinks}></MetaLinks>
+                <div className="py-3 max-w-lg mx-auto">
+                    <MetaLinks links={metaLinks}></MetaLinks>
                 </div>
             </div>
         </Layout>
