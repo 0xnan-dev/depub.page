@@ -4,6 +4,9 @@ import 'quill//dist/quill.snow.css'
 import { FC, useEffect, useRef, } from 'react'
 import markdownToDelta from "markdown-to-quill-delta";
 import converter from "../../../utils/showdown";
+import Debug from 'debug';
+
+const debug = Debug('web:component:QuillEditor')
 
 const quillOption = {
     // debug: 'info',
@@ -17,6 +20,29 @@ const quillOption = {
     theme: 'snow'
 }
 
+function setupQuillEditor(el: HTMLElement) {
+    const quill = new Quill(el, quillOption)
+    const filteredAttr = ['color', 'width', 'height']
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+        debug(node, delta)
+        delta.ops = delta.ops.map(op => {
+            const attributes = Object.keys(op.attributes || {} )
+                .filter(k => filteredAttr.indexOf(k) === -1)
+                .reduce((result: object, key) => {
+                    return Object.assign(result, {
+                        [key]: (op.attributes || {})[key]
+                    })
+                }, {})
+            return {
+                attributes: attributes,
+                insert: op.insert
+            }
+        })
+        return delta
+    })
+    return quill
+}
+
 const QuillEditor: FC<{
     value?: string,
     onChange: (val: string) => void,
@@ -26,7 +52,7 @@ const QuillEditor: FC<{
     let editor = useRef<Quill|null>(null)
     useEffect(() => {
         if (el.current && !editor.current) {
-            const quill = new Quill(el.current, quillOption)
+            const quill = setupQuillEditor(el.current)
             quill.on('text-change', onTextChange)
             editor.current = quill
         }
@@ -50,10 +76,16 @@ const QuillEditor: FC<{
         }
     }, [disabled])
 
-    function getEditorContent() {
+    function getEditorContent(): null | string {
         if (!editor.current) return null
         const htmlContent = editor.current.root.innerHTML
-        return converter.makeMarkdown(htmlContent).replaceAll('<br>', '\n')
+        debug(htmlContent)
+        let mdContent = converter.makeMarkdown(htmlContent)
+            .replaceAll('<br>', '\n')
+            .replaceAll('<!-- -->', '\n')
+        mdContent = mdContent.trim()
+        debug(mdContent)
+        return mdContent
     }
 
     function onTextChange() {
@@ -65,7 +97,7 @@ const QuillEditor: FC<{
 
     return (
         <div>
-            <div ref={el} style={{height: '300px'}}></div>
+            <div ref={el}  style={{height: 'calc(100vh - 140px)' }}></div>
         </div>
 
     )
