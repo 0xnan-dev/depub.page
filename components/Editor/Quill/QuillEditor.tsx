@@ -1,6 +1,4 @@
 import Quill from 'quill'
-import 'quill//dist/quill.core.css'
-import 'quill//dist/quill.snow.css'
 import { FC, useEffect, useRef, } from 'react'
 import markdownToDelta from "markdown-to-quill-delta";
 import converter from "../../../utils/showdown";
