@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import Dropdown from "../Common/Dropdown";
 import { useRouter } from "next/router";
 
+const isDev = process.env.NODE_ENV !== 'production';
 
 const PageSummary: FC<{
     pageId: string,
@@ -20,7 +21,7 @@ const PageSummary: FC<{
     }
 
     return (
-        <Link href={`/page?pageId=${pageId}`} passHref>
+        <Link href={isDev? `/page?pageId=${pageId}`: `/page/${pageId}`} passHref>
             <div className="mx-auto mb-3 block p-6 bg-white rounded-lg border border-gray-200 shadow-md cursor-pointer">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
