@@ -4,7 +4,7 @@ import UserProfile from '../User/Profile'
 
 const Navbar: FC = () => {
     return (
-            <nav className="fixed z-40 h-16 t-0 w-full bg-white border-gray-100 border-b px-2 sm:px-4 py-2.5 dark:bg-gray-800">
+            <nav className="fixed z-30 h-16 t-0 w-full bg-white border-gray-100 border-b px-2 sm:px-4 py-2.5 dark:bg-gray-800">
                 <div className="container mx-auto flex items-center justify-center">
                     <Link href="/">
                         <a>
@@ -33,7 +33,7 @@ const LoginedNavbar: FC<{
     onBack?: MouseEventHandler,
 }> = ({ children, onBack, }) => {
     return (
-            <nav className="fixed z-40 h-16 t-0 w-full bg-white border-gray-100 border-b px-2 sm:px-4 py-2.5 dark:bg-gray-800">
+            <nav className="fixed z-30 h-16 t-0 w-full bg-white border-gray-100 border-b px-2 sm:px-4 py-2.5 dark:bg-gray-800">
                 <div className="container mx-auto flex items-center ">
                     <div className="grow">
                         <UserProfile></UserProfile>
