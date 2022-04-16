@@ -6,18 +6,21 @@ import { downloadIpfs } from "../utils/arweave/api";
 import { MetaLinks } from "../components/Page";
 import { MetaLinkProps } from "../components/Page/MetaLink";
 import PageContent from '../components/Page/Content';
-import { useAlertContext } from "../hooks/useAlert.hook";
 
 const Page = () => {
     const router = useRouter();
     const {
         fetchMessage,
     } = useAppState()
-    const pageId = router.query.pageId
+    let pageId = router.query.pageId
     const [ ipfsId, setIpfsId ] = useState<string | null>(null)
     const [ arweaveId, setArweaveId] = useState<string | null>(null)
     const [ isLoaded, setIsloaded ] = useState(false)
     const [ markDownContent, SetMarkDownContent ] = useState<string | null>(null)
+
+    if (!pageId && typeof window !== "undefined") {
+        pageId = (window?.location?.pathname || '').replace('/page/', '')
+    }
 
     function getIdByProtocal(fingerprints: string[], protocal: string) {
         for (const fingerprint of fingerprints) {
