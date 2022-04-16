@@ -62,7 +62,7 @@ const AlertList: FC<{
 }> = ({ alerts, onClose }) => {
 
     return (
-        <div className="p-4 fixed t-0 l-0 r-0 w-full z-50">
+        <div className="p-4 fixed t-0 l-0 r-0 w-full z-40">
             {
                 alerts.map((alert, i) => 
                     <Alert 
