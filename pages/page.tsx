@@ -6,6 +6,9 @@ import { downloadIpfs } from "../utils/arweave/api";
 import { MetaLinks } from "../components/Page";
 import { MetaLinkProps } from "../components/Page/MetaLink";
 import PageContent from '../components/Page/Content';
+import Debug from 'debug'
+
+const debug = Debug('web:page:page')
 
 const Page = () => {
     const router = useRouter();
@@ -19,7 +22,10 @@ const Page = () => {
     const [ markDownContent, SetMarkDownContent ] = useState<string | null>(null)
 
     if (!pageId && typeof window !== "undefined") {
-        pageId = (window?.location?.pathname || '').replace('/page/', '')
+        pageId = (window?.location?.pathname || '')
+            .replace('/page/', '')
+            .replace(/\/$/g, '')
+        debug('pageId', pageId)
     }
 
     function getIdByProtocal(fingerprints: string[], protocal: string) {
