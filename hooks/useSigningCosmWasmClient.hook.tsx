@@ -47,12 +47,12 @@ export const getChainInfo = () => {
       coinType: 118,
     },
     bech32Config: {
-      bech32PrefixAccAddr: 'cosmos',
-      bech32PrefixAccPub: 'cosmospub',
-      bech32PrefixValAddr: 'cosmosvaloper',
-      bech32PrefixValPub: 'cosmosvaloperpub',
-      bech32PrefixConsAddr: 'cosmosvalcons',
-      bech32PrefixConsPub: 'cosmosvalconspub',
+      bech32PrefixAccAddr: 'like',
+      bech32PrefixAccPub: 'likepub',
+      bech32PrefixValAddr: 'likevaloper',
+      bech32PrefixValPub: 'likevaloperpub',
+      bech32PrefixConsAddr: 'likevalcons',
+      bech32PrefixConsPub: 'likevalconspub',
     },
     currencies: [
       {
@@ -76,31 +76,31 @@ export const getChainInfo = () => {
       average: 10,
       high: 1000,
     },
-    features: ['stargate', 'ibc-transfer'],
+    features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go'],
   };
 
   const testnet = {
-    chainId: 'likecoin-public-testnet-3',
+    chainId: 'likecoin-public-testnet-5',
     chainName: 'LikeCoin public test chain',
-    rpc: 'https://likecoin-public-testnet-rpc.nnkken.dev/',
-    rest: 'https://likecoin-public-testnet-lcd.nnkken.dev/',
+    rpc: 'https://likecoin-public-testnet-5.oursky.dev/',
+    rest: 'https://likecoin-public-testnet-5.oursky.dev/rpc/',
     stakeCurrency: {
       coinDenom: 'EKIL',
       coinMinimalDenom: 'nanoekil',
       coinDecimals: 9,
       coinGeckoId: 'likecoin',
     },
-    walletUrlForStaking: 'https://stake.like.co',
+    walletUrlForStaking: 'https://likecoin-public-testnet-5.netlify.app',
     bip44: {
       coinType: 118,
     },
     bech32Config: {
-      bech32PrefixAccAddr: 'cosmos',
-      bech32PrefixAccPub: 'cosmospub',
-      bech32PrefixValAddr: 'cosmosvaloper',
-      bech32PrefixValPub: 'cosmosvaloperpub',
-      bech32PrefixConsAddr: 'cosmosvalcons',
-      bech32PrefixConsPub: 'cosmosvalconspub',
+      bech32PrefixAccAddr: 'like',
+      bech32PrefixAccPub: 'likepub',
+      bech32PrefixValAddr: 'likevaloper',
+      bech32PrefixValPub: 'likevaloperpub',
+      bech32PrefixConsAddr: 'likevalcons',
+      bech32PrefixConsPub: 'likevalconspub',
     },
     currencies: [
       {
@@ -120,8 +120,8 @@ export const getChainInfo = () => {
     ],
     coinType: 118,
     gasPriceStep: {
-      low: 0.01,
-      average: 1,
+      low: 1,
+      average: 10,
       high: 1000,
     },
   };
